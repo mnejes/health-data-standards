@@ -55,9 +55,9 @@ module HealthDataStandards
             end
             puts "bundle metadata unpacked..."
 
-            measure_ids = unpack_and_store_measures(zip_file, options[:type], bundle, options[:update_measures])
-            unpack_and_store_patients(zip_file, options[:type], bundle) unless options[:exclude_results]
             unpack_and_store_valuesets(zip_file, bundle)
+            measure_ids = unpack_and_store_measures(zip_file, options[:type], bundle, options[:update_measures])
+            unpack_and_store_qdm_patients(zip_file, options[:type], bundle) unless options[:exclude_results]
             unpack_and_store_results(zip_file, options[:type], measure_ids, bundle) unless options[:exclude_results]
 
           end
@@ -117,8 +117,12 @@ module HealthDataStandards
             measure = source_measure.clone
             measure_ids << measure['id']
             measure['bundle_id'] = bundle.id
+            value_sets = []
+            measure.value_set_oid_version_objects.each do |vsv|
+              value_sets << HealthDataStandards::SVS::ValueSet.where(:oid => vsv.oid, :version => vsv.version).first.id
+            end
+            measure['value_sets'] = value_sets
             Mongoid.default_client["measures"].insert_one(measure)
-
             if update_measures
               Mongoid.default_client["measures"].find({hqmf_id: measure["hqmf_id"], sub_id: measure["sub_id"]}).each do |m|
                 b = HealthDataStandards::CQM::Bundle.find(m["bundle_id"])
@@ -132,6 +136,39 @@ module HealthDataStandards
           end
           puts "\rLoading: Measures Complete          "
           measure_ids
+        end
+
+        def self.unpack_and_store_qdm_patients(zip, type, bundle)
+          entries = zip.glob(File.join(SOURCE_ROOTS[:patients],type || '**','json','*.json'))
+          entries.each_with_index do |entry, index|
+            patient = QDM::Patient.new(unpack_json(entry))
+            patient['bundleId'] = bundle.id
+            # #index
+            # source_data_with_references = Array.new
+            # source_data_reference_id_hash = Hash.new
+            # source_data_id_hash = Hash.new
+            # index = 0
+            # #loops through source data criteria, if there are references adds ids to hash
+            # patient['source_data_criteria'].each do |data_criteria|
+            #   source_data_id_hash[data_criteria['criteria_id']] = index
+            #   if data_criteria['references'] != nil
+            #     source_data_with_references.push(index)
+            #     reference_ids = Array.new
+            #     data_criteria['references'].each do |reference|
+            #       reference_ids.push(reference['reference_id'])
+            #     end
+            #     source_data_reference_id_hash[data_criteria['criteria_id']] = reference_ids
+            #   end
+            #   index = index + 1
+            # end
+            # #if there are references, id references are reestablished
+            # if source_data_with_references.size > 0
+            #   reconnect_references(patient, source_data_with_references, source_data_reference_id_hash, source_data_id_hash)
+            # end
+            patient.save
+            report_progress('patients', (index*100/entries.length)) if index%10 == 0
+          end
+          puts "\rLoading: Patients Complete          "
         end
 
         def self.unpack_and_store_patients(zip, type, bundle)
