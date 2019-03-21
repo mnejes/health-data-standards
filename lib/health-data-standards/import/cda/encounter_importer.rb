@@ -13,6 +13,7 @@ module HealthDataStandards
         def create_entry(entry_element, nrh = NarrativeReferenceHandler.new)
           encounter = super
           extract_performer(entry_element, encounter)
+          extract_admit_source(entry_element, encounter)
           extract_facility(entry_element, encounter)
           extract_reason(entry_element, encounter, nrh)
           extract_reason_or_negation(entry_element, encounter)
@@ -66,6 +67,17 @@ module HealthDataStandards
         def extract_discharge_disposition(parent_element, encounter)
           encounter.discharge_time = encounter.end_time
           encounter.discharge_disposition = extract_code(parent_element, "./sdtc:dischargeDispositionCode")
+        end
+        
+        def extract_admit_source(parent_element, encounter)
+          admit_source_element = parent_element.at_xpath("./cda:participant[@typeCode='LOC']/cda:participantRole[@classCode='SDLOC'][cda:templateId/@root='2.16.840.1.113883.10.20.24.3.151']")
+          if admit_source_element
+            admissionSource = AdmissionSource.new
+            code_hash = extract_code(admit_source_element, './cda:code')
+            admissionSource['code'] = code_hash["code"]
+            admissionSource['code_system'] = code_hash["code_system"]
+            encounter.admission_source = admissionSource
+          end
         end
 
         def extract_transfer(transfer_element, encounter)
