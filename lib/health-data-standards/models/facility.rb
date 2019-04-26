@@ -7,11 +7,7 @@ class Facility
   
   field :start_time, type: Integer
   field :end_time, type: Integer
-  field :locationPeriodLow, type: Integer
-  field :locationPeriodHigh, type: Integer
-  
-  field :display, type: String
-  
+ 
 
   embeds_many :addresses, as: :locatable
   embeds_many :telecoms, as: :contactable
