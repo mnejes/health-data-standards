@@ -107,14 +107,6 @@ module HealthDataStandards
           encounter.transfer_from = transfer if transfer_from
           encounter.transfer_to = transfer if transfer_to
         end
-        def update_facility(raw_result)
-          raw_result["locationPeriodLow"] = raw_result["start_time"]
-          raw_result["locationPeriodHigh"] = raw_result["end_time"]
-          updated_facility = {}
-          updated_facility[:values] = []
-          updated_facility[:values].push(raw_result)
-          updated_facility
-      end
         def transfer_from_or_to(transfer_element)
           transfer_from = true if transfer_element['typeCode'] && transfer_element['typeCode'] == 'ORG'
           transfer_to = true if transfer_element['typeCode'] && transfer_element['typeCode'] == 'DST'
