@@ -20,7 +20,13 @@
           <low <%= value_or_null_flavor(entry.admit_time || entry.start_time) %>/>
           <high <%= value_or_null_flavor(entry.discharge_time || entry.end_time) %>/>
         </effectiveTime>
+        <%== render(:partial => 'author_qdm', :locals => {:entry => entry}) %>
         <% if entry.discharge_disposition.present? %>
+<<<<<<< HEAD
+
+            <sdtc:dischargeDispositionCode code="<%= entry.discharge_disposition[:code] %>"
+                codeSystem="<%= HealthDataStandards::Util::CodeSystemHelper.oid_for_code_system(entry.discharge_disposition[:code_system]) %>"/>
+=======
             <sdtc:dischargeDispositionCode code="<%= entry.discharge_disposition[:code] %>" 
                 codeSystem="<%= HealthDataStandards::Util::CodeSystemHelper.oid_for_code_system(entry.discharge_disposition[:code_system]) || entry.discharge_disposition[:code_system] %>"/>
         <% end -%>
@@ -47,7 +53,10 @@
             </playingEntity>
           </participantRole>
         </participant>
+>>>>>>> 53e56d4b9cb17be88453abd7ed93e4ef03a23d92
         <% end -%>
+        <%== render(:partial => 'facility', :locals => {:entry => entry,:facility_oids=>field_oids["FACILITY_LOCATION"]}) %>
+        <%== render(:partial => 'admission_source', :locals => {:entry => entry,:admission_source_oids=>field_oids["ADMISSION_SOURCE"]}) %>
         <% if entry.reason.present? -%>
           <%== render(:partial => 'reason', :locals => {:entry => entry,:reason_oids=>field_oids["REASON"]}) %>
         <% end -%>
@@ -83,7 +92,12 @@
                         <!-- Attribute: discharge datetime -->
                         <high <%= value_or_null_flavor(entry.end_time) %>/>
                       </effectiveTime>
+<<<<<<< HEAD
+                      <value code="<%= diagnosis[:code] %>" xsi:type="CD" codeSystem="<%= HealthDataStandards::Util::CodeSystemHelper.oid_for_code_system(diagnosis[:code_system]) %>" />
+
+=======
                       <value code="<%= entry.diagnosis.values[1][0][:code] %>" xsi:type="CD" codeSystem="<%= HealthDataStandards::Util::CodeSystemHelper.oid_for_code_system(entry.diagnosis.values[1][0][:code_system]) %>"/>
+>>>>>>> 53e56d4b9cb17be88453abd7ed93e4ef03a23d92
                     </observation>
                   </entryRelationship>
                 </act>
