@@ -82,11 +82,20 @@ module HealthDataStandards
         #        will have the "cda" namespace registered to "urn:hl7-org:v3"
         # @return [Record] a Mongoid model representing the patient
         def parse_c32(doc)
+          t1 = Time.now
+         
           c32_patient = Record.new
           get_demographics(c32_patient, doc)
+          t2 = Time.now
+          msecs = (t2 - t1) * 1000.0
+          STDERR.puts "| xml2json | " + `hostname`.strip + " | " + Time.now.strftime("%m/%d/%Y %I:%M:%S %p") + " | INFO | 1 | patient_post | Complete in "+msecs.to_s+" ms for demographic "
+          t1 = Time.now
           create_c32_hash(c32_patient, doc)
           check_for_cause_of_death(c32_patient)
-          
+          t2 = Time.now
+          msecs = (t2 - t1) * 1000.0
+          STDERR.puts "| xml2json | " + `hostname`.strip + " | " + Time.now.strftime("%m/%d/%Y %I:%M:%S %p") + " | INFO | 1 | patient_post | Complete in "+msecs.to_s+" ms for done "
+
           c32_patient
         end
         
@@ -112,9 +121,18 @@ module HealthDataStandards
         def create_c32_hash(record, doc)
           nrh = CDA::NarrativeReferenceHandler.new
           nrh.build_id_map(doc)
+          t2 = Time.now
+          msecs = (t2 - t1) * 1000.0
+          STDERR.puts "| xml2json | " + `hostname`.strip + " | " + Time.now.strftime("%m/%d/%Y %I:%M:%S %p") + " | INFO | 1 | patient_post | Complete in "+msecs.to_s+" ms for build map "
+          t1 = Time.now
+
           @section_importers.each_pair do |section, importer|
             record.send(section.to_setter, importer.create_entries(doc, nrh))
-          end
+            t2 = Time.now
+            msecs = (t2 - t1) * 1000.0
+            STDERR.puts "| xml2json | " + `hostname`.strip + " | " + Time.now.strftime("%m/%d/%Y %I:%M:%S %p") + " | INFO | 1 | patient_post | Complete in "+msecs.to_s+" ms for section "
+            t1 = Time.now
+            end
         end
 
         # Inspects a C32 document and populates the patient Hash with first name, last name
