@@ -91,6 +91,7 @@ module HealthDataStandards
           STDERR.puts "| xml2json | " + `hostname`.strip + " | " + Time.now.strftime("%m/%d/%Y %I:%M:%S %p") + " | INFO | 1 | patient_post | Complete in "+msecs.to_s+" ms for demographic "
           t1 = Time.now
           create_c32_hash(c32_patient, doc)
+          t1 = Time.now
           check_for_cause_of_death(c32_patient)
           t2 = Time.now
           msecs = (t2 - t1) * 1000.0
@@ -119,6 +120,7 @@ module HealthDataStandards
         #        will have the "cda" namespace registered to "urn:hl7-org:v3"
         # @return [Hash] a represnetation of the patient with symbols as keys for each section
         def create_c32_hash(record, doc)
+          t1 = Time.now
           nrh = CDA::NarrativeReferenceHandler.new
           nrh.build_id_map(doc)
           t2 = Time.now
