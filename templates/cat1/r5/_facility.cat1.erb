@@ -13,9 +13,9 @@
     <high <%= value_or_null_flavor(end_time) %>/>
   </time>
   <participantRole classCode="SDLOC">
-    <% if facility[:code].present? -%>
-        <code code="<%= facility[:code][:code] %>"
-          codeSystem="<%= HealthDataStandards::Util::CodeSystemHelper.oid_for_code_system(facility[:code][:code_system]) %>"/>
+    <% if facility['code'].present? -%>
+        <code code="<%= facility['code']['code'] %>"
+          codeSystem="<%= HealthDataStandards::Util::CodeSystemHelper.oid_for_code_system(facility['code']['code_system']) %>"/>
     <% else -%>
     <code nullFlavor="UNK"/>
     <% end -%>
