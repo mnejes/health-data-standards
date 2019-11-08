@@ -32,13 +32,13 @@
           <time>
             <!-- Attribute: facility location arrival datetime -->
             <% if entry.facility[:values][0][:locationPeriodLow].present? -%>
-               <low <%= value_or_null_flavor(DateTime.strptime(entry.facility[:values][0] [:locationPeriodLow], '%m/%d/%Y %I:%M:%S %p')) %>/>
+               <low <%= value_or_null_flavor(DateTime.strptime(entry.facility[:values][0] [:locationPeriodLow], '%m/%d/%Y %I:%M %p')) %>/>
             <% else -%>
                <low <%= value_or_null_flavor(entry.start_time) %>/>
             <% end %>
             <!-- Attribute: facility location departure datetime -->
             <% if entry.facility[:values][0][:locationPeriodHigh].present? -%>
-               <high <%= value_or_null_flavor(DateTime.strptime(entry.facility[:values][0] [:locationPeriodHigh], '%m/%d/%Y %I:%M:%S %p')) %>/>
+               <high <%= value_or_null_flavor(DateTime.strptime(entry.facility[:values][0] [:locationPeriodHigh], '%m/%d/%Y %I:%M %p')) %>/>
             <% else -%>
                 <high <%= value_or_null_flavor(entry.end_time) %>/>
             <% end %>
