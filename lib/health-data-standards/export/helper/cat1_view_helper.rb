@@ -28,10 +28,8 @@ module HealthDataStandards
             # If there's an error exporting particular criteria, re-raise an error that includes useful debugging info
             begin
               entries = entries_for_data_criteria(udc['data_criteria'], patient)
-              if entries.length > 0
+              if entries.length > 0 && (tempEntries & entries).empty?
                 tempEntries.concat(entries)
-              end
-              if not tempEntries.in?(entries)
                 render_data_criteria(udc, entries, r2_compatibility, qrda_version)
               end
             rescue => e
