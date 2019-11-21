@@ -23,8 +23,8 @@ module HealthDataStandards
         def render_patient_data(patient, measures, r2_compatibility, qrda_version = nil)
           HealthDataStandards.logger.warn("Generating CAT I for #{patient.first} #{patient.last}")
           udcs = unique_data_criteria(measures, r2_compatibility)
+          tempEntries = []
           data_criteria_html = udcs.map do |udc|
-            tempEntries = []
             # If there's an error exporting particular criteria, re-raise an error that includes useful debugging info
             begin
               entries = entries_for_data_criteria(udc['data_criteria'], patient)
