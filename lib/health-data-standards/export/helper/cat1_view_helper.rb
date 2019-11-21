@@ -24,10 +24,16 @@ module HealthDataStandards
           HealthDataStandards.logger.warn("Generating CAT I for #{patient.first} #{patient.last}")
           udcs = unique_data_criteria(measures, r2_compatibility)
           data_criteria_html = udcs.map do |udc|
+            tempEntries = []
             # If there's an error exporting particular criteria, re-raise an error that includes useful debugging info
             begin
               entries = entries_for_data_criteria(udc['data_criteria'], patient)
-              render_data_criteria(udc, entries, r2_compatibility, qrda_version)
+              if entries.length > 0
+                tempEntries.concat(entries)
+              end
+              if not tempEntries.in?(entries)
+                render_data_criteria(udc, entries, r2_compatibility, qrda_version)
+              end
             rescue => e
               raise HealthDataStandards::Export::PatientExportDataCriteriaException.new(e.message, patient, udc['data_criteria'], entries)
             end
