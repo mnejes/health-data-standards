@@ -60,6 +60,7 @@
         </participant>
           <%   end
                end -%>
+        <%== render(:partial => 'admission_source', :locals => {:entry => entry}) %>
         <% if entry.reason.present? -%>
           <%== render(:partial => 'reason', :locals => {:entry => entry,:reason_oids=>field_oids["REASON"]}) %>
         <% end -%>
