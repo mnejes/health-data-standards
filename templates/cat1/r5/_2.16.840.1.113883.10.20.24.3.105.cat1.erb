@@ -44,7 +44,7 @@
         
         <!-- Attribute: dose -->
         <% if entry.dose.present? -%>
-          <doseQuantity value="<%= entry.dose[:scalar]%>"/>
+          <doseQuantity value="<%= entry.dose[:value]%>" unit="<%= entry.dose[:unit] %>"/>
         <% end -%>
 
         <% if entry.product_form.present? -%>
