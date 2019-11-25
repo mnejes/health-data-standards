@@ -58,7 +58,7 @@ module HealthDataStandards
 
       def create_translations_code_string(entry, options={})
         code_string = ''
-        entry.translation_codes(options['preferred_code_sets'], options['value_set_map']).each do |translation|
+        entry.translation_codes(options['preferred_code_sets'], options['value_set_map']).uniq.each do |translation|
           code_string += "<translation code=\"#{translation['code']}\" codeSystem=\"#{HealthDataStandards::Util::CodeSystemHelper.oid_for_code_system(translation['code_set'])}\"/>\n"
         end
         code_string
