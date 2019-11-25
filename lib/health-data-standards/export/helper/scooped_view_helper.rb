@@ -181,7 +181,7 @@ module HealthDataStandards
                 end
               else
                 # The !! hack makes sure that negation_ind is a boolean. negations use the same hqmf templates in r2
-                entry.is_in_code_set?(codes) && (is_hqmfr2 || !!entry.negation_ind == data_criteria.negation)
+                entry.is_in_code_set?(codes) && (is_hqmfr2 || !!entry.negation_ind)
               end
             end
           end
