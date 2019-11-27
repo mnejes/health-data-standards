@@ -36,13 +36,13 @@
             <% if facility[:locationPeriodLow].present? -%>
                <low <%= value_or_null_flavor(DateTime.strptime(facility[:locationPeriodLow], '%m/%d/%Y %I:%M %p')) %>/>
             <% else -%>
-               <low <%= value_or_null_flavor(entry.start_time) %>/>
+               <low nullFlavor="UNK" />
             <% end %>
             <!-- Attribute: facility location departure datetime -->
             <% if facility[:locationPeriodHigh].present? -%>
                <high <%= value_or_null_flavor(DateTime.strptime(facility[:locationPeriodHigh], '%m/%d/%Y %I:%M %p')) %>/>
             <% else -%>
-                <high <%= value_or_null_flavor(entry.end_time) %>/>
+                <high nullFlavor="UNK" />
             <% end %>
           </time>
           <participantRole classCode="SDLOC">
