@@ -28,7 +28,17 @@ module HealthDataStandards
             # If there's an error exporting particular criteria, re-raise an error that includes useful debugging info
             begin
               entries = entries_for_data_criteria(udc['data_criteria'], patient)
-              render_entries = (entries - tempEntries)
+              render_entries=[]
+              for entry in entries
+                if ([entry] - tempEntries).length > 0
+                  render_entries.push(entry)
+                else
+                  existingEntry = tempEntries.select{|e| e==entry}[0]
+                  if not existingEntry.to_json == entry.to_json
+                    render_entries.push(entry)
+                  end
+                end
+              end
               if render_entries.length > 0
                 tempEntries.concat(render_entries)
                 render_data_criteria(udc, render_entries, r2_compatibility, qrda_version)
