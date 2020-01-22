@@ -26,6 +26,8 @@ module HealthDataStandards
           case entry_element.at_xpath(@template_xpath).value
           when "2.16.840.1.113883.10.20.24.3.3"
             return "communication_from_provider_to_patient"
+          when "2.16.840.1.113883.10.20.24.3.156"
+            return "communication_from_provider_to_patient"       
           when "2.16.840.1.113883.10.20.24.3.2"
             return "communication_from_patient_to_provider"
           when "2.16.840.1.113883.10.20.24.3.4"
