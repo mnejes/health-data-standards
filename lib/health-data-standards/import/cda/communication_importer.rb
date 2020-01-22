@@ -13,6 +13,7 @@ module HealthDataStandards
         end
 
         def create_entry(entry_element, nrh = NarrativeReferenceHandler.new)
+          HealthDataStandards.logger.warn("Communicationfor #{entry_element}")
           communication = super
           communication.direction = find_communication_direction(entry_element)
           extract_reason_or_negation(entry_element, communication)
