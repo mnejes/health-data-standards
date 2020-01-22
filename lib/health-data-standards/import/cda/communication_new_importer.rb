@@ -1,7 +1,7 @@
 module HealthDataStandards
   module Import
     module CDA
-      class CommunicationImporterNew < SectionImporter
+      class CommunicationNewImporter < SectionImporter
 
         #scoped to not look in the plan of care section so planned procedures do not end up mixed with
         #past procedures
