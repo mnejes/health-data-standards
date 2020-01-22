@@ -1,7 +1,7 @@
 module HealthDataStandards
   module Import
     module CDA
-      class CommunicationImporter2020 < SectionImporter
+      class CommunicationImporterNew < SectionImporter
 
         #scoped to not look in the plan of care section so planned procedures do not end up mixed with
         #past procedures
@@ -26,6 +26,8 @@ module HealthDataStandards
         def find_communication_direction(entry_element)
           case entry_element.at_xpath(@template_xpath).value
           when "2.16.840.1.113883.10.20.24.3.3"
+            return "communication_from_provider_to_patient"
+          when "2.16.840.1.113883.10.20.24.3.156"
             return "communication_from_provider_to_patient"
           when "2.16.840.1.113883.10.20.24.3.2"
             return "communication_from_patient_to_provider"
