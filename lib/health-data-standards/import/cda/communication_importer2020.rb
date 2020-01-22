@@ -1,12 +1,13 @@
 module HealthDataStandards
   module Import
     module CDA
-      class CommunicationImporter < SectionImporter
+      class CommunicationImporter2020 < SectionImporter
 
         #scoped to not look in the plan of care section so planned procedures do not end up mixed with
         #past procedures
         def initialize(entry_finder=EntryFinder.new("./cda:entry/cda:act[cda:templateId/@root = '2.16.840.1.113883.10.20.24.3.2'] | ./cda:entry/cda:act[cda:templateId/@root = '2.16.840.1.113883.10.20.24.3.156'] | ./cda:entry/cda:act[cda:templateId/@root = '2.16.840.1.113883.10.20.24.3.3'] | ./cda:entry/cda:act[cda:templateId/@root = '2.16.840.1.113883.10.20.24.3.4']"))
           super(entry_finder)
+          @code_xpath = "./cda:entryRelationship/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.88']/cda:value"
           @entry_class = Communication
           @template_xpath = "./cda:templateId/@root"
           @reference_xpath = "./sdtc:inFulfillmentOf1"
