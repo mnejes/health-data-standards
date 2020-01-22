@@ -128,6 +128,7 @@ require_relative 'health-data-standards/import/cda/procedure_importer'
 require_relative 'health-data-standards/import/cda/result_importer'
 require_relative 'health-data-standards/import/cda/vital_sign_importer'
 require_relative 'health-data-standards/import/cda/communication_importer'
+require_relative 'health-data-standards/import/cda/communication_new_importer'
 
 require_relative 'health-data-standards/import/c32/condition_importer'
 require_relative 'health-data-standards/import/c32/immunization_importer'
