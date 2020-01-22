@@ -20,6 +20,7 @@ module HealthDataStandards
           @section_importers[:conditions] = [generate_importer(GestationalAgeImporter, nil, '2.16.840.1.113883.3.560.1.1001'),
                                              generate_importer(EcogStatusImporter, nil, '2.16.840.1.113883.3.560.1.1001'),
                                              generate_importer(SymptomActiveImporter, nil, '2.16.840.1.113883.3.560.1.69', 'active'),
+                                             generate_importer(SymptomActiveNewImporter, nil, '2.16.840.1.113883.3.560.1.69', 'active'),
                                              generate_importer(DiagnosisActiveImporter, nil, '2.16.840.1.113883.3.560.1.2', 'active'),
                                              generate_importer(DiagnosisImporter, nil, '2.16.840.1.113883.10.20.28.3.110'),
                                              generate_importer(CDA::ConditionImporter, "./cda:entry/cda:observation[cda:templateId/@root = '2.16.840.1.113883.10.20.24.3.54']", '2.16.840.1.113883.3.560.1.404'), # patient characteristic age
