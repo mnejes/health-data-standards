@@ -49,7 +49,7 @@ module HealthDataStandards
         def extract_facility(parent_element, encounter)
           encounter.facility = {}
           encounter.facility[:values] = []
-          facility_location_elements = parent_element.at_xpath("./cda:participant[@typeCode='LOC']/cda:participantRole[@classCode='SDLOC']")
+          facility_location_elements = parent_element.xpath("./cda:participant[@typeCode='LOC']/cda:participantRole[@classCode='SDLOC']")
           facility_location_elements&.each do |facility_location_element|
             facility = Facility.new(name: facility_location_element.at_xpath("./cda:playingEntity/cda:name").try(:text))
             facility.addresses = facility_location_element.xpath("./cda:addr").try(:map) {|ae| import_address(ae)}
