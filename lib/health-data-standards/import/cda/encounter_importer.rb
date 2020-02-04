@@ -114,21 +114,15 @@ module HealthDataStandards
           transfer_to = true if transfer_element['typeCode'] && transfer_element['typeCode'] == 'DST'
           [transfer_from, transfer_to]
         end
-        def update_facility(baseFacility,raw_result)
+
+        def update_facility(baseFacility, raw_result)
           raw_result["locationPeriodLow"] = raw_result["start_time"]
           raw_result["locationPeriodHigh"] = raw_result["end_time"]
           baseFacility[:values].push(raw_result)
           baseFacility
         end
 
-        def update_facility(raw_result)
-            raw_result["locationPeriodLow"] = raw_result["start_time"]
-            raw_result["locationPeriodHigh"] = raw_result["end_time"]
-            updated_facility = {}
-            updated_facility[:values] = []
-            updated_facility[:values].push(raw_result)
-            updated_facility
-        end
+       
       end
     end
   end
