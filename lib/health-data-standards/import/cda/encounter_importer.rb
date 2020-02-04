@@ -47,15 +47,17 @@ module HealthDataStandards
         end
         
         def extract_facility(parent_element, encounter)
-          participant_element = parent_element.at_xpath("./cda:participant[@typeCode='LOC']/cda:participantRole[@classCode='SDLOC']")
-          if (participant_element)
-            facility = Facility.new(name: participant_element.at_xpath("./cda:playingEntity/cda:name").try(:text))
-            facility.addresses = participant_element.xpath("./cda:addr").try(:map) {|ae| import_address(ae)}
-            facility.telecoms = participant_element.xpath("./cda:telecom").try(:map) {|te| import_telecom(te)}
-            facility.code = extract_code(participant_element, './cda:code')
-            extract_dates(participant_element.parent, facility, "time")
+          encounter.facility = {}
+          encounter.facility[:values] = []
+          facility_location_elements = parent_element.at_xpath("./cda:participant[@typeCode='LOC']/cda:participantRole[@classCode='SDLOC']")
+          facility_location_elements&.each do |facility_location_element|
+            facility = Facility.new(name: facility_location_element.at_xpath("./cda:playingEntity/cda:name").try(:text))
+            facility.addresses = facility_location_element.xpath("./cda:addr").try(:map) {|ae| import_address(ae)}
+            facility.telecoms = facility_location_element.xpath("./cda:telecom").try(:map) {|te| import_telecom(te)}
+            facility.code = extract_code(facility_location_element, './cda:code')
+            extract_dates(facility_location_element.parent, facility, "time")
             facility_raw = facility.as_json()
-            encounter.facility = update_facility(facility_raw)
+            encounter.facility = update_facility(encounter.facility, facility_raw)
           end
         end
     
@@ -112,6 +114,13 @@ module HealthDataStandards
           transfer_to = true if transfer_element['typeCode'] && transfer_element['typeCode'] == 'DST'
           [transfer_from, transfer_to]
         end
+        def update_facility(baseFacility,raw_result)
+          raw_result["locationPeriodLow"] = raw_result["start_time"]
+          raw_result["locationPeriodHigh"] = raw_result["end_time"]
+          baseFacility[:values].push(raw_result)
+          baseFacility
+        end
+
         def update_facility(raw_result)
             raw_result["locationPeriodLow"] = raw_result["start_time"]
             raw_result["locationPeriodHigh"] = raw_result["end_time"]
