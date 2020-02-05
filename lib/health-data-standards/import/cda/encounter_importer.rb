@@ -118,7 +118,7 @@ module HealthDataStandards
         def update_facility(baseFacility, raw_result)
           raw_result["locationPeriodLow"] = raw_result["start_time"]
           raw_result["locationPeriodHigh"] = raw_result["end_time"]
-          baseFacility[:values].push(raw_result)
+          baseFacility[:values].push(raw_result) if raw_result["locationPeriodLow"] 
           baseFacility
         end
 
