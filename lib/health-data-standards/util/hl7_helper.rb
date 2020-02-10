@@ -13,15 +13,7 @@ module HealthDataStandards
           day = timestamp.length >= 8 ? timestamp[6..7].to_i : 1
           hour = timestamp.length >= 10 ? timestamp[8..9].to_i : 0
           min = timestamp.length >= 12 ? timestamp[10..11].to_i : 0
-            sec = timestamp.length >= 14 ? timestamp[12..13].to_i : 0
-            
-            if timestamp =~ /[\+-]/
-              offsetHour = timestamp[14..16]
-              offsetMinutes = timestamp[17..18]
-              Time.new(year, month, day, hour, min, sec, "#{offsetHour}:#{offsetMinutes}").getgm.to_i
-            else
-              Time.gm(year, month, day, hour, min, sec).to_i
-            end
+         
         else
           nil
         end
