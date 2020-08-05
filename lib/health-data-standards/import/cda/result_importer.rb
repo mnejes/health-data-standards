@@ -35,10 +35,10 @@ module HealthDataStandards
     
         def extract_result_date_time(parent_element, result)
           if parent_element.at_xpath("./cda:entryRelationship/cda:observation[cda:templateId/@root = '2.16.840.1.113883.10.20.22.4.2']/cda:effectiveTime/@value")
-            result[:result_date_time] = HL7Helper.timestamp_to_integer(parent_element.at_xpath("cda:#{element_name}")['value'])
+            result[:result_date_time] = HL7Helper.timestamp_to_integer(parent_element.at_xpath("./cda:entryRelationship/cda:observation[cda:templateId/@root = '2.16.840.1.113883.10.20.22.4.2']/cda:effectiveTime")['value'])
           end
           if parent_element.at_xpath("./cda:entryRelationship/cda:observation[cda:templateId/@root = '2.16.840.1.113883.10.20.22.4.2']/cda:effectiveTime/cda:low")
-            result[:result_date_time] = HL7Helper.timestamp_to_integer(parent_element.at_xpath("cda:#{element_name}/cda:low")['value'])
+            result[:result_date_time] = HL7Helper.timestamp_to_integer(parent_element.at_xpath("./cda:entryRelationship/cda:observation[cda:templateId/@root = '2.16.840.1.113883.10.20.22.4.2']/cda:effectiveTime/cda:low")['value'])
           end
         end
 
