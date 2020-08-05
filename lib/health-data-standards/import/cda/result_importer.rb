@@ -6,6 +6,7 @@ module HealthDataStandards
           super(entry_finder)
           @entry_class = LabResult
           @value_xpath = "cda:value | ./cda:entryRelationship/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.24.3.87']/cda:value | ./cda:entryRelationship/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.22.4.2']/cda:value"
+          @result_datetime_xpath = "./cda:entryRelationship/cda:observation[cda:templateId/@root = '2.16.840.1.113883.10.20.22.4.2']/cda:effectiveTime"
         end
         
         def create_entry(entry_element, nrh = NarrativeReferenceHandler.new)
@@ -14,6 +15,7 @@ module HealthDataStandards
           extract_reference_range(entry_element, result)
           extract_reason_or_negation(entry_element, result)
           extract_reason_description(entry_element, result, nrh)
+          extract_result_date_time(entry_element, result)
           result
         end
     
@@ -31,6 +33,16 @@ module HealthDataStandards
           result.reference_range = parent_element.at_xpath("./cda:referenceRange/cda:observationRange/cda:text").try(:text)
         end
     
+        def extract_result_date_time(parent_element, result)
+          if parent_element.at_xpath("{@result_datetime_xpath}/@value")
+            result[:result_date_time] = HL7Helper.timestamp_to_integer(parent_element.at_xpath("cda:#{element_name}")['value'])
+          end
+          if parent_element.at_xpath({"{@result_datetime_xpath}/cda:low")
+            result[:result_date_time] = HL7Helper.timestamp_to_integer(parent_element.at_xpath("cda:#{element_name}/cda:low")['value'])
+          end
+        end
+
+
       end
     end
   end
